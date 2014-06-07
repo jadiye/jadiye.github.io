@@ -1,0 +1,41 @@
+{
+	"name": "Parashram Jadiye",
+		"children": [
+		{
+			"name": "Raghunath Jadiye",
+			"children": [
+			{
+				"name": "Muralidhar Jadiye",
+				"children": [
+				{
+					"name": "Ulhas Jadiye",
+					"children": [
+					{
+						"name" : "Sonali Jadiye-Pilwatkar"
+					},
+					{
+						"name" : "Sayali Jadiye"
+					}
+					]
+				},
+				{"name": "Chandrakant Jadiye", "children":[{"name":"Sachin Jadiye"},{"name": "Nitin Jadiye"}]},
+				{"name": "Shamkant Jadiye", "children":[{"name":"Amey Jadiye"},{"name":"Pradnya Jadiye-Patne"}]},
+				{"name": "Shashikant Jadiye", "children":[{"name":"Suraj Jadiye"},{"name":"Chandani"}]}
+				]
+			},
+			{
+				"name": "Keshav Jadiye",
+				"children": [
+				{"name": ""}
+				]
+			},
+			{
+				"name": "Sudhakar Jadiye",
+				"children": [
+				{"name": ""}
+				]
+			}
+			]
+		}
+	]
+}
