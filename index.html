@@ -1,169 +1,209 @@
+
+
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
 
-.node {
-  cursor: pointer;
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Royal Family Tree - Demos | BALKAN OrgChartJS</title>
+    <style id="myStyles">
+        html, body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    font-family: Helvetica;
+    overflow: hidden;
 }
 
-.node circle {
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+#tree {
+    width: 100%;
+    height: 100%;
 }
 
-.node text {
-  font: 10px sans-serif;
-}
 
-.link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
-}
+    </style>
 
-</style>
+</head>
 <body>
-<center><h1>JADIYE FAMILY TREE</h1></center>
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script>
+    <script src="https://balkangraph.com/js/latest/OrgChart.js"></script>
 
-var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    width = 960 - margin.right - margin.left,
-    height = 800 - margin.top - margin.bottom;
+<div id="tree"></div>
+    <script>
     
-var i = 0,
-    duration = 750,
-    root;
+window.onload = function () {
+    OrgChart.templates.family_template = Object.assign({}, OrgChart.templates.ana);
+    OrgChart.templates.family_template.size = [86, 86];
+    OrgChart.templates.family_template.plus = "";
+    OrgChart.templates.family_template.minus = "";
+    OrgChart.templates.family_template.rippleRadius = 40;
+    OrgChart.templates.family_template.name = '<text style="font-size: 12px;" fill="#000000" x="43" y="100" text-anchor="middle">{val}</text>';
+    OrgChart.templates.family_template.title = '<text style="font-size: 12px;" fill="#aeaeae" x="43" y="115" text-anchor="middle">{val}</text>';
+    OrgChart.templates.family_template.img = '<clipPath id="{randId}"><circle cx="43" cy="43" r="38.5"></circle></clipPath></circle><image preserveAspectRatio="xMidYMid slice" clip-path="url(#{randId})" xlink:href="{val}" x="3" y="3"  width="80" height="80"></image>';
+    OrgChart.templates.family_template.node = '<circle stroke-width="3" fill="none" stroke="#aeaeae" cx="43" cy="43" r="41.5"></circle>';
+    OrgChart.templates.family_template.defs = '<g transform="matrix(0.05,0,0,0.05,-13,-15.5)" id="baby"><circle cx="260" cy="310" r="200" fill="#ffffff"></circle><path fill="#aeaeae" d="m468.64 268.32h-13.591c-18.432-89.348-95.612-157.432-189.139-161.798-.501-.185-1.015-.348-1.545-.482-18.363-4.622-31.188-22.595-31.188-43.707 0-17.828 14.468-32.333 32.252-32.333 12.573 0 22.802 10.258 22.802 22.866 0 8.284 6.716 15 15 15s15-6.716 15-15c0-29.15-23.687-52.866-52.802-52.866-34.326 0-62.252 27.962-62.252 62.333 0 17.876 5.828 34.443 15.769 47.432-80.698 15.127-144.725 78.25-161.291 158.555h-13.591c-24.103 0-43.712 19.596-43.712 43.683 0 24.086 19.609 43.682 43.712 43.682h14.692c20.935 89.871 101.582 157.018 197.596 157.018s176.66-67.148 197.596-157.018h14.692c24.103 0 43.712-19.596 43.712-43.682 0-24.087-19.609-43.683-43.712-43.683zm-265.054 55.257c-8.284-.024-14.981-6.758-14.958-15.043.007-2.337-.708-13.999-15.481-14.041-.026 0-.053 0-.08 0-14.697 0-15.475 11.62-15.481 13.953-.023 8.284-6.75 15.007-15.043 14.957-8.284-.024-14.98-6.759-14.957-15.043.038-13.322 5.349-25.101 14.955-33.166 8.223-6.904 19.065-10.702 30.543-10.702h.148c11.534.033 22.412 3.896 30.63 10.876 9.559 8.12 14.803 19.928 14.765 33.25-.023 8.27-6.735 14.957-14.999 14.957-.013.002-.027.002-.042.002zm52.766 129.374c-26.485 0-48.033-21.533-48.033-48.002 0-8.284 6.716-15 15-15s15 6.716 15 15c0 9.926 8.089 18.002 18.033 18.002s18.033-8.076 18.033-18.002c0-8.284 6.716-15 15-15s15 6.716 15 15c-.001 26.469-21.548 48.002-48.033 48.002zm113.765-129.374c-.015 0-.029 0-.044 0-8.284-.024-14.98-6.759-14.957-15.043.016-5.445-1.993-9.263-6.14-11.673-5.407-3.142-13.27-3.165-18.695-.053-4.161 2.387-6.191 6.193-6.207 11.638-.023 8.27-6.735 14.957-14.999 14.957-.015 0-.029 0-.043 0-8.284-.024-14.981-6.758-14.958-15.043.046-16.149 7.802-29.845 21.281-37.576 14.814-8.497 33.929-8.443 48.695.138 13.434 7.807 21.112 21.547 21.066 37.696-.023 8.271-6.735 14.959-14.999 14.959z"/> </g>';
+    OrgChart.templates.family_template_blue = Object.assign({}, OrgChart.templates.family_template);
+    OrgChart.templates.family_template_blue.node = '<circle stroke-width="3" fill="none" stroke="#039BE5" cx="43" cy="43" r="41.5"></circle>';
 
-var tree = d3.layout.tree()
-    .size([height, width]);
+    var chart = new OrgChart(document.getElementById("tree"), {
+        template: "family_template",
+        enableDragDrop: true,
+        enableSearch: false,
+        siblingSeparation: 100,
+        nodeBinding: {
+            field_0: 'id',
+            name: "name",
+            title: "title",
+            img: "img",
+        },
+        tags: {
+            blue: {
+                template: "family_template_blue"
+            }
+        }
+    });
 
-var diagonal = d3.svg.diagonal()
-    .projection(function(d) { return [d.y, d.x]; });
+    chart.on('render-link', function(sender, args){
+        if (args.cnode.ppid != undefined){
+            args.html += '<use xlink:href="#baby" x="'+ args.p.xa +'" y="'+ args.p.ya +'"/>';
+        }
+    });
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    chart.load([          
+            /* { id: 1, tags: ["blue"], name: "King George VI", img: "https://cdn.balkan.app/shared/f1.png"},
+            { id: 2, pid: 1, tags: ["partner"], name: "Queen Elizabeth", title: "The Queen Mother", img: "https://cdn.balkan.app/shared/f2.png" },
+            { id: 3, pid: 1, tags: ["blue"],  ppid: 2, name: "Queen Elizabeth II", img: "https://cdn.balkan.app/shared/f5.png"},
+            { id: 4, pid: 3, tags: ["left-partner"], name: "Prince Philip", title: "Duke of Edinburgh", img: "https://cdn.balkan.app/shared/f3.png"},
+            { id: 5, pid: 1, ppid: 2, name: "Princess Margaret", img: "https://cdn.balkan.app/shared/f6.png"},
+            { id: 6, pid: 3,tags: ["blue"], ppid: 4, name: "Charles", title: "Prince of Wales", img: "https://cdn.balkan.app/shared/f8.png"},
+            { id: 7, pid: 6, tags: ["partner"] , name: "Diana", title: "Princess of Wales", img: "https://cdn.balkan.app/shared/f9.png"},
+            { id: 8, pid: 6, tags: ["partner"], name: "Camila", title: "Duchess of Cornwall", img: "https://cdn.balkan.app/shared/f7.png" },
+            { id: 9, pid: 3, ppid: 4 , name: "Anne", title: "Princess Royal", img: "https://cdn.balkan.app/shared/f10.png"},
+            { id: 10, pid: 3, ppid: 4 , name: "Prince Andrew", title: "Duke of York", img: "https://cdn.balkan.app/shared/f11.png"},
+            { id: 11, pid: 3, ppid: 4, name: "Prince Edward", title: "Earl of Wessex", img: "https://cdn.balkan.app/shared/f12.png"},
+            { id: 12, pid: 6, ppid: 7, tags: ["blue"], name: "Prince William", title: "Duch of Cambridge", img: "https://cdn.balkan.app/shared/f14.png"},
+            { id: 13, pid: 6, ppid: 7, name: "Prince Harry", img: "https://cdn.balkan.app/shared/f15.png"},
+            { id: 14, pid: 12, tags: ["left-partner"], name: "Catherine", title: "Duchess of Cambridge", img: "https://cdn.balkan.app/shared/f13.png"},
+            { id: 15, pid: 13, tags: ["right-partner"], name: "Meghan Markle", img: "https://cdn.balkan.app/shared/f16.png"},
+            { id: 16, pid: 12, ppid: 14, tags: ["blue"], name: "Prince George of Cambridge", img: "https://cdn.balkan.app/shared/f17.png"},
+            { id: 17, pid: 12, ppid: 14, tags: ["blue"], name: "Prince Charlotte of Cambridge", img: "https://cdn.balkan.app/shared/f18.png"},
+            { id: 18, pid: 12, ppid: 14, tags: ["blue"], name: "Prince Louis of Cambridge", img: "https://cdn.balkan.app/shared/f19.png"} */
 
-d3.json("ftree.json", function(error, flare) {
-  root = flare;
-  root.x0 = height / 2;
-  root.y0 = 0;
+            { id: 1, tags: ["blue"], name: "Ramchandra Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 2, pid: 1, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  function collapse(d) {
-    if (d.children) {
-      d._children = d.children;
-      d._children.forEach(collapse);
-      d.children = null;
-    }
-  }
+            { id: 3, pid: 1, ppid: 2,tags: ["blue"], name: "Parashram Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 4, pid: 3, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  root.children.forEach(collapse);
-  update(root);
-});
+            { id: 5, pid: 1, ppid: 2, tags: ["blue"], name: "Gopal Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 6, pid: 5, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-d3.select(self.frameElement).style("height", "800px");
+            { id: 7, pid: 3, ppid: 4, tags: ["blue"], name: "Raghunath Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 8, pid: 7, tags: ["partner"], name: "Anusayabai Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-function update(source) {
+            { id: 9, pid: 3, ppid: 4, tags: ["blue"], name: "Pandharinath Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 10, pid: 9, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  // Compute the new tree layout.
-  var nodes = tree.nodes(root).reverse(),
-      links = tree.links(nodes);
+            { id: 11, pid: 3, ppid: 4, tags: ["blue"], name: "Bulakhi Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 12, pid: 11, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  // Normalize for fixed-depth.
-  nodes.forEach(function(d) { d.y = d.depth * 180; });
+            { id: 13, pid: 5, ppid: 6, tags: ["blue"], name: "Vishwanath Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 14, pid: 13, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  // Update the nodes…
-  var node = svg.selectAll("g.node")
-      .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
-  // Enter any new nodes at the parent's previous position.
-  var nodeEnter = node.enter().append("g")
-      .attr("class", "node")
-      .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-      .on("click", click);
+            { id: 15, pid: 7, ppid: 8, tags: ["blue"], name: "Dattatrey Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 16, pid: 15, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  nodeEnter.append("circle")
-      .attr("r", 1e-6)
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+            { id: 17, pid: 7, ppid: 8, tags: ["blue"], name: "Keshav Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 18, pid: 17, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  nodeEnter.append("text")
-      .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
-      .attr("dy", ".35em")
-      .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-      .text(function(d) { return d.name; })
-      .style("fill-opacity", 1e-6);
+            { id: 19, pid: 7, ppid: 8, tags: ["blue"], name: "Murlidhar Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 20, pid: 19, tags: ["partner"], name: "Indira Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  // Transition nodes to their new position.
-  var nodeUpdate = node.transition()
-      .duration(duration)
-      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+            { id: 21, pid: 7, ppid: 8, tags: ["blue"], name: "Madhukar Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 22, pid: 21, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  nodeUpdate.select("circle")
-      .attr("r", 4.5)
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
-  nodeUpdate.select("text")
-      .style("fill-opacity", 1);
+            { id: 23, pid: 9, ppid: 10, tags: ["blue"], name: "Shridhar Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 24, pid: 23, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  // Transition exiting nodes to the parent's new position.
-  var nodeExit = node.exit().transition()
-      .duration(duration)
-      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
-      .remove();
+            { id: 25, pid: 9, ppid: 10, tags: ["blue"], name: "Purushottam Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 26, pid: 25, tags: ["partner"], name: "Prabha Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  nodeExit.select("circle")
-      .attr("r", 1e-6);
+            { id: 27, pid: 9, ppid: 10, tags: ["blue"], name: "Prabhakar Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 28, pid: 27, tags: ["partner"], name: "Pushpa Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  nodeExit.select("text")
-      .style("fill-opacity", 1e-6);
 
-  // Update the links…
-  var link = svg.selectAll("path.link")
-      .data(links, function(d) { return d.target.id; });
+            { id: 29, pid: 13, ppid: 14, tags: ["blue"], name: "Ramesh Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 30, pid: 29, tags: ["partner"], name: "Sunita Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  // Enter any new links at the parent's previous position.
-  link.enter().insert("path", "g")
-      .attr("class", "link")
-      .attr("d", function(d) {
-        var o = {x: source.x0, y: source.y0};
-        return diagonal({source: o, target: o});
-      });
 
-  // Transition links to their new position.
-  link.transition()
-      .duration(duration)
-      .attr("d", diagonal);
+            { id: 31, pid: 15, ppid: 16, tags: ["blue"], name: "Sudhakar Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 32, pid: 31, tags: ["partner"], name: "Aasha Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-  // Transition exiting nodes to the parent's new position.
-  link.exit().transition()
-      .duration(duration)
-      .attr("d", function(d) {
-        var o = {x: source.x, y: source.y};
-        return diagonal({source: o, target: o});
-      })
-      .remove();
+            { id: 33, pid: 15, ppid: 16, tags: ["blue"], name: "Vibhakar Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
 
-  // Stash the old positions for transition.
-  nodes.forEach(function(d) {
-    d.x0 = d.x;
-    d.y0 = d.y;
-  });
-}
+            { id: 35, pid: 15, ppid: 16, tags: ["blue"], name: "Baliram Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 36, pid: 35, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
 
-// Toggle children on click.
-function click(d) {
-  if (d.children) {
-    d._children = d.children;
-    d.children = null;
-  } else {
-    d.children = d._children;
-    d._children = null;
-  }
-  update(d);
-}
 
-</script>
+            { id: 37, pid: 17, ppid: 18, tags: ["blue"], name: "Anil Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 38, pid: 37, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 39, pid: 17, ppid: 18, tags: ["blue"], name: "Prakash Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 40, pid: 39, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 41, pid: 17, ppid: 18, tags: ["blue"], name: "Dipak Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 42, pid: 41, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 43, pid: 17, ppid: 18, tags: ["blue"], name: "Sunil Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 44, pid: 43, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 45, pid: 17, ppid: 18, tags: ["blue"], name: "Mahesh Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 46, pid: 45, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+
+
+            { id: 47, pid: 19, ppid: 20, tags: ["blue"], name: "Ulhas Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 48, pid: 47, tags: ["partner"], name: "Jyotsna Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 49, pid: 19, ppid: 20, tags: ["blue"], name: "Chandrakant Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 50, pid: 49, tags: ["partner"], name: "Ratna Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 51, pid: 19, ppid: 20, tags: ["blue"], name: "Shamkant Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 52, pid: 51, tags: ["partner"], name: "Shaila Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 53, pid: 19, ppid: 20, tags: ["blue"], name: "Shashikant Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 54, pid: 53, tags: ["partner"], name: "Rekha Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 55, pid: 19, ppid: 20, tags: ["blue"], name: "Ravi Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            
+
+
+            { id: 56, pid: 29, ppid: 30, tags: ["blue"], name: "Rakesh Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 57, pid: 56, tags: ["partner"], name: "Madhuri Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 58, pid: 29, ppid: 30, tags: ["blue"], name: "Atul Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 59, pid: 58, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+
+            { id: 60, pid: 31, ppid: 32, tags: ["blue"], name: "Uday Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 61, pid: 60, tags: ["partner"], name: "Chitra Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 62, pid: 31, ppid: 32, tags: ["blue"], name: "Amol Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 63, pid: 62, tags: ["partner"], name: "Ashwini Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+
+
+            { id: 64, pid: 49, ppid: 50, tags: ["blue"], name: "Sachin Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 65, pid: 64, tags: ["partner"], name: "Rashmi Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 66, pid: 49, ppid: 50, tags: ["blue"], name: "Nitin Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 67, pid: 66, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+
+            { id: 68, pid: 51, ppid: 52, tags: ["blue"], name: "Amey Jadiye", img: "https://avatars.githubusercontent.com/u/2662046"},
+            { id: 69, pid: 68, tags: ["partner"], name: "Apurva Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 70, pid: 51, ppid: 52, tags: ["blue"], name: "Pradnya Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            
+
+            { id: 72, pid: 53, ppid: 54, tags: ["blue"], name: "Suraj Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            { id: 73, pid: 72, tags: ["partner"], name: "Unknown", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 74, pid: 53, ppid: 54, tags: ["blue"], name: "Chandani Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"},
+            
+
+            { id: 75, pid: 47, ppid: 48, tags: ["blue"], name: "Sonali Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+            { id: 76, pid: 47, ppid: 48, tags: ["blue"], name: "Sayli Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-woman-circle-512.png"},
+
+            { id: 77, pid: 68, ppid: 69, tags: ["blue"], name: "Prakhar Jadiye", img: "https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/user-man-circle-512.png"}
+            
+        ]);
+};
+    </script>
+</body>
+</html>
